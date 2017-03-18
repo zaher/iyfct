@@ -7,8 +7,9 @@ Jump over trains with closed doors and try (as much as possible) to run through 
 
 h2. Controls
 
-* Space: Jump
-* R: Restart
-* 1-4 or F1-F4: Set zoom
-* P: Pause game
+* Space: Jump or "a" button on Joystick
+* R: Restart 
+* 0-4 or F0-F4: Set zoom , 0 is fullscreen
+* P: Pause game, "start" button on gamepad will pause
 * M: Mute sound
+* Escape: back to menu or exist from game if it in main menu, also "back" in gamepad will works
