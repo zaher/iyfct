@@ -50,7 +50,7 @@ function love.load()
 	love.lastCommand = ''
 
 	pl = Player.create()
-	updateScale()
+	updateScale(false) --in game console should be fullscreen
 	restart()
 end
 
@@ -332,7 +332,7 @@ function love.keypressed(key, scancode)
 		SCALE = 6
 		updateScale(false)
 	elseif scancode == '0' or cmd == 'kp0' or cmd == 'f0' then
-		-- updateScale(true) todo
+		updateScale(true)
 	end
 end
 
@@ -368,10 +368,18 @@ function love.gamepadreleased(joystick, button)
 	love.lastCommand = ''
 end
 
-function updateScale()
-	SCRNWIDTH = WIDTH*SCALE
-	SCRNHEIGHT = HEIGHT*SCALE
-	love.window.setMode(SCRNWIDTH,SCRNHEIGHT,{fullscreen=false})
+function updateScale(fullscreen)
+	love.window.setFullscreen(fullscreen)
+	if love.window.getFullscreen() then
+		SCALE = love.graphics:getWidth() / WIDTH
+		SCRNWIDTH = love.graphics:getWidth()
+		SCRNHEIGHT = love.graphics:getHeight()
+		love.window.setMode(SCRNWIDTH,SCRNHEIGHT)
+	else
+		SCRNWIDTH = WIDTH*SCALE
+		SCRNHEIGHT = HEIGHT*SCALE
+		love.window.setMode(SCRNWIDTH,SCRNHEIGHT)
+	end
 end
 
 function loadResources()
