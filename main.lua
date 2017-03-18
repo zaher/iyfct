@@ -47,6 +47,8 @@ function love.load()
 	loadResources()
 	love.graphics.setFont(imgfont)
 
+	love.lastCommand = ''
+
 	pl = Player.create()
 	updateScale()
 	restart()
@@ -238,18 +240,22 @@ function drawGame()
 	end
 end
 
-function love.keypressed(key,scancode)
-	if key == 'space' then
-		return         -- avoid unnecessary checks
-	elseif key == 'r' then
+function love.command(cmd)
+	love.lastCommand = cmd
+	if cmd == 'reset' then
 		restart()
-	elseif key == 'up' then
+	elseif cmd == 'up' then
 		selection = selection-1
-	elseif key == 'down' then
+	elseif cmd == 'down' then
 		selection = selection+1
-
-	elseif key == 'return' then
-		if gamestate == 1 then
+	elseif cmd == 'return' then
+		if gamestate == 0 then
+			if pl.alive == true then
+				pause = not pause
+			else
+				restart();
+			end
+		elseif gamestate == 1 then
 			if submenu == 0 then -- splash screen
 				submenu = 2 -- Jumps straight to difficulty.
 				auSelect:stop() auSelect:play()
@@ -261,7 +267,7 @@ function love.keypressed(key,scancode)
 			end
 		end
 
-	elseif key == 'escape' then
+	elseif cmd == 'escape' then
 		if gamestate == 0 then -- ingame
 			gamestate = 1
 			submenu = 2
@@ -274,11 +280,11 @@ function love.keypressed(key,scancode)
 			end
 		end
 		auSelect:stop() auSelect:play()
-	elseif key == 'p' then
+	elseif cmd == 'pause' then
 		if gamestate == 0 and pl.alive == true then
 			pause = not pause
 		end
-	elseif key == 'm' then
+	elseif cmd == 'mute' then
 		if mute == false then
 			mute = true
 			love.audio.setVolume(0.0)
@@ -286,25 +292,80 @@ function love.keypressed(key,scancode)
 			mute = false
 			love.audio.setVolume(1.0)
 		end
-	elseif scancode == '1' or key == 'kp1' or key == 'f1' then
-		SCALE = 1
-		updateScale()
-	elseif scancode == '2' or key == 'kp2' or key == 'f2' then
-		SCALE = 2
-		updateScale()
-	elseif scancode == '3' or key == 'kp3' or key == 'f3' then
-		SCALE = 3
-		updateScale()
-	elseif scancode == '4' or key == 'kp4' or key == 'f4' then
-		SCALE = 4
-		updateScale()
-	elseif scancode == '5' or key == 'kp5' or key == 'f5' then
-		SCALE = 5
-		updateScale()
-	elseif scancode == '6' or key == 'kp6' or key == 'f6' then
-		SCALE = 6
-		updateScale()
 	end
+end
+
+function love.keypressed(key, scancode)
+	--works well with love.keyreleased
+	if key == 'space' then -- will be A most of the time
+		love.command('jump')
+	elseif key == 'r' then
+		love.command('reset')
+	elseif key == 'up' then
+		love.command('up')
+	elseif key == 'down' then
+		love.command('down')
+	elseif key == 'm' then
+		love.command('mute')
+	elseif key == 'p' then
+		love.command('pause')
+	elseif key == 'return' then
+		love.command('return')
+	elseif key == 'escape' then
+		love.command('escape')
+	elseif scancode == '1' or cmd == 'kp1' or cmd == 'f1' then
+		SCALE = 1
+		updateScale(false)
+	elseif scancode == '2' or cmd == 'kp2' or cmd == 'f2' then
+		SCALE = 2
+		updateScale(false)
+	elseif scancode == '3' or cmd == 'kp3' or cmd == 'f3' then
+		SCALE = 3
+		updateScale(false)
+	elseif scancode == '4' or cmd == 'kp4' or cmd == 'f4' then
+		SCALE = 4
+		updateScale(false)
+	elseif scancode == '5' or cmd == 'kp5' or cmd == 'f5' then
+		SCALE = 5
+		updateScale(false)
+	elseif scancode == '6' or cmd == 'kp6' or cmd == 'f6' then
+		SCALE = 6
+		updateScale(false)
+	elseif scancode == '0' or cmd == 'kp0' or cmd == 'f0' then
+		-- updateScale(true) todo
+	end
+end
+
+function love.keyreleased(key,scancode)
+	love.lastCommand = ''
+end
+
+function love.gamepadpressed(joystick, button)
+	if button == 'a' then
+		love.command('jump')
+	elseif button == 'b' then
+		--love.command('reset')
+	elseif button == 'dpup' then
+		love.command('up')
+	elseif button == 'dpdown' then
+		love.command('down')
+	elseif button == 'y' then
+		love.command('mute')
+	elseif button == 'z' then
+		love.command('pause')
+	elseif button == 'start' then
+		if joystick:isGamepadDown("back") then --compatiple with RetroPie exit emulator
+			love.event.quit()
+		else
+			love.command('return')
+		end
+	elseif button == 'back' then
+		love.command('escape')
+	end
+end
+
+function love.gamepadreleased(joystick, button)
+	love.lastCommand = ''
 end
 
 function updateScale()
