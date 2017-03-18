@@ -10,7 +10,8 @@ function drawMenu()
 	drawTracks()
 
 	if submenu == 0 then
-		love.graphics.draw(imgSplash,86,0)		
+		love.graphics.draw(imgSplash,86,0)
+		love.graphics.printf("press start to play", 0, imgSplash:getHeight() + 5, WIDTH,"center")
 	elseif submenu == 1 then
 	elseif submenu == 2 then
 		love.graphics.printf("select difficulty",0,22,WIDTH,"center")
