@@ -34,6 +34,12 @@ difficulty_settings = {{1.5,0.03,2.5},{1.7,0.04,2.5},{2.25,0.06,3.1}}
 use_music = true
 
 function love.load()
+	local joysticks = love.joystick.getJoysticks()
+	joystick = joysticks[1]
+	--Download it from https://github.com/gabomdq/SDL_GameControllerDB
+	--I add my joystic as first line
+	love.joystick.loadGamepadMappings( "gamecontrollerdb.txt")
+
 	math.randomseed(os.time())
 	love.graphics.setBackgroundColor(bgcolor)
 
