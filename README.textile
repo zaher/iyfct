@@ -12,4 +12,4 @@ h2. Controls
 * 0-4 or F0-F4: Set zoom , 0 is fullscreen
 * P: Pause game, "start" button on gamepad will pause
 * M: Mute sound
-* Escape: back to menu or exist from game if it in main menu, also "back" in gamepad will works
+* Escape: back to main menu or exit from game if it is in main menu, also "back" in gamepad will works
