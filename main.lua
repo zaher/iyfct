@@ -10,7 +10,7 @@ require("menu")
 
 WIDTH = 300
 HEIGHT = 100
-SCALE = 3
+SCALE = 0  --use 0 to make FullScreen
 
 bgcolor = {236,243,201,255}
 darkcolor = {2,9,4,255}
@@ -50,7 +50,7 @@ function love.load()
 	love.lastCommand = ''
 
 	pl = Player.create()
-	updateScale(false) --in game console should be fullscreen
+	updateScale(SCALE == 0) --in game console should be fullscreen, TODO need new behavior
 	restart()
 end
 
